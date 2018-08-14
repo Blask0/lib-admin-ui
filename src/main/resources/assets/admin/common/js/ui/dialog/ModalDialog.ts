@@ -364,6 +364,7 @@ module api.ui.dialog {
         }
 
         show() {
+            api.ui.mask.BodyMask.get().show();
 
             if (!this.dialogContainer) {
                 this.dialogContainer = new DivEl('dialog-container');
@@ -385,9 +386,18 @@ module api.ui.dialog {
             }
 
             wemjq(this.body.getHTMLElement()).css('height', '');
+
+            ModalDialog.openDialogsCounter++;
         }
 
         hide() {
+            const isSingleDialogGroup = ModalDialog.openDialogsCounter === 1 ||
+                (ModalDialog.openDialogsCounter === 2 && !!this.confirmationDialog &&
+                    !!this.confirmationDialog.isVisible());
+            if (isSingleDialogGroup) {
+                api.ui.mask.BodyMask.get().hide();
+            }
+
             if (this.resizeObserver) {
                 this.resizeObserver.unobserve(this.body.getHTMLElement());
             } else {
@@ -470,8 +480,6 @@ module api.ui.dialog {
 
         open() {
 
-            api.ui.mask.BodyMask.get().show();
-
             api.ui.KeyBindings.get().shelveBindings();
 
             this.show();
@@ -498,8 +506,6 @@ module api.ui.dialog {
             ]);
 
             api.ui.KeyBindings.get().bindKeys(keyBindings);
-
-            ModalDialog.openDialogsCounter++;
         }
 
         isDirty(): boolean {
@@ -516,13 +522,6 @@ module api.ui.dialog {
         }
 
         close() {
-            const isSingleDialogGroup = ModalDialog.openDialogsCounter === 1 ||
-                                        (ModalDialog.openDialogsCounter === 2 && !!this.confirmationDialog &&
-                                         !!this.confirmationDialog.isVisible());
-            if (isSingleDialogGroup) {
-                api.ui.mask.BodyMask.get().hide();
-            }
-
             this.hide();
 
             api.ui.KeyBindings.get().unshelveBindings();
