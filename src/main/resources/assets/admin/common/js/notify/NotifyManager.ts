@@ -1,5 +1,7 @@
 module api.notify {
 
+    import StringHelper = api.util.StringHelper;
+
     export class NotifyManager {
 
         private static instance: NotifyManager;
@@ -47,6 +49,11 @@ module api.notify {
         }
 
         notify(message: Message): string {
+
+            if (!message || StringHelper.isBlank(message.getText())) {
+                return;
+            }
+
             const opts = NotifyOpts.buildOpts(message);
 
             if (this.messageExistsInRegistry(opts)) {
