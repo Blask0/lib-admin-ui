@@ -1,6 +1,5 @@
 module api.content {
 
-
     import Attribute = api.app.Attribute;
 
     export class ContentSummaryViewer extends api.ui.NamesAndIconViewer<ContentSummary> {
