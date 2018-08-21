@@ -46,21 +46,21 @@ module api.util.htmlarea.dialog {
             });
         }
 
-        show() {
-            super.show();
+        open() {
+            super.open();
             this.initEditor();
             this.addCKEListeners();
             this.fseditor.setData(this.getEditor().getData());
         }
 
-        hide() {
+        close() {
             (<CKEDITOR.editor>this.getEditor()).focusManager.unlock();
             this.getEditor().setData(this.fseditor.getData());
             this.fseditor.destroy();
             setTimeout(() => {
                 (<CKEDITOR.editor>this.getEditor()).focus();
             }, 50);
-            super.hide();
+            super.close()
         }
 
         private initEditor() {

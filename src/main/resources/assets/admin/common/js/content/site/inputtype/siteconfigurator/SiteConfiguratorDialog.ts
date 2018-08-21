@@ -208,10 +208,6 @@ module api.content.site.inputtype.siteconfigurator {
                     api.ObjectHelper.iFrameSafeInstanceOf(inputView.getInputTypeView(), api.form.inputtype.combobox.ComboBox));
         }
 
-        show() {
-            super.show();
-        }
-
         close() {
             super.close();
             this.remove();

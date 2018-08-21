@@ -135,8 +135,8 @@ module api.util.htmlarea.dialog {
             return false;
         }
 
-        show() {
-            super.show();
+        open() {
+            super.open();
             if (this.firstFocusField) {
                 this.focusFirstField();
             }

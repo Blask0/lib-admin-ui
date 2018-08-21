@@ -267,8 +267,8 @@ module api.util.htmlarea.dialog {
             this.imagePreviewContainer.removeChild(this.image);
         }
 
-        show() {
-            super.show();
+        open() {
+            super.open();
 
             this.imageUploaderEl.show();
         }

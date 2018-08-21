@@ -363,55 +363,6 @@ module api.ui.dialog {
             this.buttonRow.removeAction(action);
         }
 
-        show() {
-            api.ui.mask.BodyMask.get().show();
-
-            if (!this.dialogContainer) {
-                this.dialogContainer = new DivEl('dialog-container');
-            }
-            if (!this.dialogContainer.hasChild(this)) {
-                this.dialogContainer.appendChild(this);
-            }
-            api.dom.Body.get().appendChild(this.dialogContainer);
-            this.responsiveItem.update();
-
-            this.blurBackground();
-            super.show();
-            this.buttonRow.focusDefaultAction();
-
-            if (this.resizeObserver) {
-                this.resizeObserver.observe(this.body.getHTMLElement());
-            } else {
-                this.onResize(this.resizeHandler);
-            }
-
-            wemjq(this.body.getHTMLElement()).css('height', '');
-
-            ModalDialog.openDialogsCounter++;
-        }
-
-        hide() {
-            const isSingleDialogGroup = ModalDialog.openDialogsCounter === 1 ||
-                (ModalDialog.openDialogsCounter === 2 && !!this.confirmationDialog &&
-                    !!this.confirmationDialog.isVisible());
-            if (isSingleDialogGroup) {
-                api.ui.mask.BodyMask.get().hide();
-            }
-
-            if (this.resizeObserver) {
-                this.resizeObserver.unobserve(this.body.getHTMLElement());
-            } else {
-                this.unResize(this.resizeHandler);
-            }
-
-            this.unBlurBackground();
-            super.hide(true);
-
-            if (this.dialogContainer.getParentElement()) {
-                api.dom.Body.get().removeChild(this.dialogContainer);
-            }
-        }
-
         getButtonRow(): ButtonRow {
             return this.buttonRow;
         }
@@ -482,7 +433,30 @@ module api.ui.dialog {
 
             api.ui.KeyBindings.get().shelveBindings();
 
-            this.show();
+            api.ui.mask.BodyMask.get().show();
+
+            if (!this.dialogContainer) {
+                this.dialogContainer = new DivEl('dialog-container');
+            }
+            if (!this.dialogContainer.hasChild(this)) {
+                this.dialogContainer.appendChild(this);
+            }
+            api.dom.Body.get().appendChild(this.dialogContainer);
+            this.responsiveItem.update();
+
+            this.blurBackground();
+            super.show();
+            this.buttonRow.focusDefaultAction();
+
+            if (this.resizeObserver) {
+                this.resizeObserver.observe(this.body.getHTMLElement());
+            } else {
+                this.onResize(this.resizeHandler);
+            }
+
+            wemjq(this.body.getHTMLElement()).css('height', '');
+
+            ModalDialog.openDialogsCounter++;
 
             let keyBindings = Action.getKeyBindings(this.buttonRow.getActions());
 
@@ -522,7 +496,26 @@ module api.ui.dialog {
         }
 
         close() {
-            this.hide();
+            const isSingleDialogGroup = ModalDialog.openDialogsCounter === 1 ||
+                                        (ModalDialog.openDialogsCounter === 2 &&
+                                         this.confirmationDialog &&
+                                         this.confirmationDialog.isVisible());
+            if (isSingleDialogGroup) {
+                api.ui.mask.BodyMask.get().hide();
+            }
+
+            if (this.resizeObserver) {
+                this.resizeObserver.unobserve(this.body.getHTMLElement());
+            } else {
+                this.unResize(this.resizeHandler);
+            }
+
+            this.unBlurBackground();
+            super.hide(true);
+
+            if (this.dialogContainer.getParentElement()) {
+                api.dom.Body.get().removeChild(this.dialogContainer);
+            }
 
             api.ui.KeyBindings.get().unshelveBindings();
 
