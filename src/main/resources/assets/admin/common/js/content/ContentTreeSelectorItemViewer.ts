@@ -1,12 +1,14 @@
 module api.content {
 
+    import ContentUnnamed = api.content.ContentUnnamed;
     import ContentTreeSelectorItem = api.content.resource.ContentTreeSelectorItem;
+    import Attribute = api.app.Attribute;
 
     export class ContentTreeSelectorItemViewer
         extends api.ui.NamesAndIconViewer<ContentTreeSelectorItem> {
 
         constructor() {
-            super('content-summary-viewer');
+            super('content-tree-selector-item-viewer');
         }
 
         resolveDisplayName(object: ContentTreeSelectorItem): string {
@@ -26,10 +28,10 @@ module api.content {
         resolveSubName(object: ContentTreeSelectorItem, relativePath: boolean = false): string {
             let contentName = object.getName();
             if (relativePath) {
-                return !contentName.isUnnamed() ? object.getName().toString() : api.content.ContentUnnamed.prettifyUnnamed();
+                return !contentName.isUnnamed() ? object.getName().toString() : ContentUnnamed.prettifyUnnamed();
             } else {
-                return !contentName.isUnnamed() ? object.getPath().toString() : ContentPath.fromParent(object.getPath().getParentPath(),
-                    api.content.ContentUnnamed.prettifyUnnamed()).toString();
+                return !contentName.isUnnamed() ? object.getPath().toString() :
+                       ContentPath.fromParent(object.getPath().getParentPath(), ContentUnnamed.prettifyUnnamed()).toString();
             }
         }
 
@@ -41,6 +43,12 @@ module api.content {
             if (object) {
                 return new api.content.util.ContentIconUrlResolver().setContent(object.getContent()).resolve();
             }
+        }
+
+        resolveMainNameData(object: ContentTreeSelectorItem): Attribute {
+            const lang = object ? object.getLanguage() : null;
+            const value = !lang ? '' : `(${lang})`;
+            return {name: 'locale', value};
         }
     }
 }

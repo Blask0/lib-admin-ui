@@ -1,5 +1,7 @@
 module api.content {
 
+    import Attribute = api.app.Attribute;
+
     export class ContentSummaryAndCompareStatusViewer extends api.ui.NamesAndIconViewer<ContentSummaryAndCompareStatus> {
 
         constructor() {
@@ -62,6 +64,12 @@ module api.content {
         resolveIconUrl(object: ContentSummaryAndCompareStatus): string {
             let contentSummary = object.getContentSummary();
             return !!contentSummary ? new api.content.util.ContentIconUrlResolver().setContent(contentSummary).resolve() : '';
+        }
+
+        resolveMainNameData(object: ContentSummaryAndCompareStatus): Attribute {
+            const lang = (object && object.getContentSummary()) ? object.getContentSummary().getLanguage() : null;
+            const value = !lang ? '' : `(${lang})`;
+            return {name: 'locale', value};
         }
     }
 }

@@ -1,6 +1,7 @@
 module api.ui {
 
     import i18n = api.util.i18n;
+    import Attribute = api.app.Attribute;
 
     /**
      * A parent class capable of viewing a given object with names and icon.
@@ -76,6 +77,11 @@ module api.ui {
                 }
                 this.namesAndIconView.toggleClass('no-icon', hideIcon);
 
+                const mainNameData = this.resolveMainNameData(object);
+                if (mainNameData) {
+                    this.namesAndIconView.setMainNameData(mainNameData);
+                }
+
                 this.namesAndIconView.setMainName(displayName)
                     .setSubName(subName, subTitle);
             }
@@ -122,6 +128,10 @@ module api.ui {
         }
 
         resolveIconEl(_object: OBJECT): api.dom.Element {
+            return null;
+        }
+
+        resolveMainNameData(_object: OBJECT): Attribute | void {
             return null;
         }
 

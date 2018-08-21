@@ -15,6 +15,7 @@ module api.content {
     import SelectedOptionsView = api.ui.selector.combobox.SelectedOptionsView;
     import ComboBoxConfig = api.ui.selector.combobox.ComboBoxConfig;
     import ComboBox = api.ui.selector.combobox.ComboBox;
+    import Attribute = api.app.Attribute;
 
     export class ContentComboBox<ITEM_TYPE extends ContentTreeSelectorItem>
         extends RichComboBox<ContentTreeSelectorItem> {
@@ -255,6 +256,7 @@ module api.content {
                     .setEditable(true)
                     .setDraggable(true)
             );
+            this.addClass('content-selected-option-view');
         }
 
         resolveIconUrl(content: ContentTreeSelectorItem): string {
@@ -267,6 +269,12 @@ module api.content {
 
         resolveSubTitle(content: ContentTreeSelectorItem): string {
             return content.getPath().toString();
+        }
+
+        resolveMainNameData(content: ContentTreeSelectorItem): Attribute {
+            const lang = content ? content.getLanguage() : null;
+            const value = !lang ? '' : `(${lang})`;
+            return {name: 'locale', value};
         }
 
         protected onEditButtonClicked(e: MouseEvent) {
@@ -290,7 +298,7 @@ module api.content {
 
         optionDataHelper: OptionDataHelper<ContentTreeSelectorItem> = new ContentSummaryOptionDataHelper();
 
-        optionDisplayValueViewer: Viewer<any> = <Viewer<any>>new ContentSummaryViewer();
+        optionDisplayValueViewer: Viewer<ContentTreeSelectorItem> = new ContentTreeSelectorItemViewer();
 
         maximumOccurrences: number = 0;
 

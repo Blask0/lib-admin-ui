@@ -1,12 +1,13 @@
 module api.content.image {
 
     import MediaTreeSelectorItem = api.content.media.MediaTreeSelectorItem;
+    import Attribute = api.app.Attribute;
 
     export class ImageSelectorViewer
         extends api.ui.NamesAndIconViewer<MediaTreeSelectorItem> {
 
         constructor() {
-            super();
+            super('image-selector-viewer');
         }
 
         resolveDisplayName(object: MediaTreeSelectorItem): string {
@@ -31,6 +32,12 @@ module api.content.image {
 
         protected getHintTargetEl(): api.dom.ElementHelper {
             return this.getNamesAndIconView().getIconImageEl().getEl();
+        }
+
+        resolveMainNameData(object: MediaTreeSelectorItem): Attribute {
+            const lang = object ? object.getLanguage() : null;
+            const value = !lang ? '' : `(${lang})`;
+            return {name: 'locale', value};
         }
     }
 }

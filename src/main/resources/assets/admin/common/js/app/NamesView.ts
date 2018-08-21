@@ -1,5 +1,10 @@
 module api.app {
 
+    export type Attribute = {
+        name: string,
+        value: string
+    };
+
     export class NamesView extends api.dom.DivEl {
 
         private mainNameEl: api.dom.H6El;
@@ -40,7 +45,15 @@ module api.app {
             elements.forEach((element: api.dom.Element) => {
                 this.subNameEl.appendChild(element);
             });
+            return this;
+        }
 
+        setMainNameData(attr: Attribute): NamesView {
+            if (attr.value) {
+                this.mainNameEl.getEl().setData(attr.name, attr.value);
+            } else {
+                this.mainNameEl.getEl().removeData(attr.name);
+            }
             return this;
         }
     }

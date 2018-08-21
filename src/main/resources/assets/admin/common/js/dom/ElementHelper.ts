@@ -141,7 +141,8 @@ module api.dom {
         setData(name: string, value: string): ElementHelper {
             api.util.assert(!api.util.StringHelper.isEmpty(name), 'Name cannot be empty');
             api.util.assert(!api.util.StringHelper.isEmpty(value), 'Value cannot be empty');
-            this.el.setAttribute('data-' + name, value);
+            const dataName = name.indexOf('data-') === 0 ? name : `data-${name}`;
+            this.el.setAttribute(dataName, value);
             wemjq(this.el).data(name, value);
             return this;
         }
@@ -149,6 +150,14 @@ module api.dom {
         getData(name: string): string {
             let data = wemjq(this.el).data(name);
             return data ? data.toString() : undefined;
+        }
+
+        removeData(name: string): ElementHelper {
+            api.util.assert(!api.util.StringHelper.isEmpty(name), 'Name cannot be empty');
+            const dataName = name.indexOf('data-') === 0 ? name : `data-${name}`;
+            this.el.removeAttribute(dataName);
+            wemjq(this.el).removeData(name);
+            return this;
         }
 
         getValue(): string {

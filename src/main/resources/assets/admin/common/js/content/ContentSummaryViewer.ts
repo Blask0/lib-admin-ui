@@ -1,5 +1,8 @@
 module api.content {
 
+
+    import Attribute = api.app.Attribute;
+
     export class ContentSummaryViewer extends api.ui.NamesAndIconViewer<ContentSummary> {
 
         constructor() {
@@ -38,6 +41,12 @@ module api.content {
 
         resolveIconUrl(object: ContentSummary): string {
             return new api.content.util.ContentIconUrlResolver().setContent(object).resolve();
+        }
+
+        resolveMainNameData(object: ContentSummary): Attribute {
+            const lang = object ? object.getLanguage() : null;
+            const value = !lang ? '' : `(${lang})`;
+            return {name: 'locale', value};
         }
     }
 }

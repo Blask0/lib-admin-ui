@@ -1,6 +1,8 @@
 module api.ui.selector.combobox {
 
     import NamesAndIconView = api.app.NamesAndIconView;
+    import Attribute = api.app.Attribute;
+
     export class RichSelectedOptionView<T> extends api.ui.selector.combobox.BaseSelectedOptionView<T> {
 
         private optionDisplayValue: T;
@@ -38,6 +40,10 @@ module api.ui.selector.combobox {
             return '';
         }
 
+        resolveMainNameData(_content: T): Attribute | void {
+            return null;
+        }
+
         protected appendActionButtons() {
             if (this.draggable) {
                 this.appendChild(new api.dom.DivEl('drag-control'));
@@ -71,6 +77,11 @@ module api.ui.selector.combobox {
                 this.namesAndIconView.setIconUrl(this.resolveIconUrl(values) + '?crop=false');
             } else {
                 this.namesAndIconView.setIconClass(this.resolveIconClass(values));
+            }
+
+            const attr = this.resolveMainNameData(values);
+            if (attr) {
+                this.namesAndIconView.setMainNameData(attr);
             }
         }
 

@@ -27,6 +27,7 @@ module api.ui.selector {
             return wemQ(data.map((item) => this.createOption(item)));
         }
 
+        //
         createOption(data: OPTION_DISPLAY_VALUE, isReadonly: boolean = false): Option<OPTION_DISPLAY_VALUE> {
             return {
                 value: this.helper.getDataId(data),
